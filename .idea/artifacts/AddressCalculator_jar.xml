@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="AddressCalculator:jar">
+    <output-path>$PROJECT_DIR$/.idea/artifacts</output-path>
+    <root id="archive" name="AddressCalculator.jar">
+      <element id="module-output" name="AddressCalculator" />
+    </root>
+  </artifact>
+</component>

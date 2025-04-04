@@ -1,0 +1,16 @@
+name: AddressCalculator
+version: '1.0-SNAPSHOT'
+main: me.emmatoocold.addressCalculator.addresscalculator
+api-version: '1.21'
+commands:
+  getaddress:
+    description: Calculates plot address.
+    usage: "/getaddress <Side of road> <X coordinate> <z coordinate>"
+    aliases: [address]
+
+  getaddressmap:
+    description: Calculates plot address.
+    usage: "/getaddressmap <X coordinate> <z coordinate>"
+    aliases: [ addressmap ]
+
+
