@@ -103,26 +103,6 @@ public final class addressCalculator extends JavaPlugin {
                 // hopefully this never actually happens
             }
         }
-
-        /*
-        try {
-            // create a flag with the name "isDistrict"
-            BooleanFlag flag = new BooleanFlag("isDistrict");
-            registry.register(flag);
-            isDistrict = flag; // only set our field if there was no error
-        } catch (FlagConflictException e) {
-            // some other plugin registered a flag by the same name already.
-            // you can use the existing flag, but this may cause conflicts - be sure to check type
-            Flag<?> existing = registry.get("isDistrict");
-            if (existing instanceof BooleanFlag) {
-                isDistrict = (BooleanFlag) existing;
-            } else {
-                // types don't match - this is bad news! some other plugin conflicts with you
-                // hopefully this never actually happens
-            }
-        }
-         */
-
     }
 
     @Override
