@@ -5,5 +5,8 @@ api-version: '1.21'
 commands:
   getaddress:
     description: Calculates plot address.
-    usage: "/getaddress <Side of road> <X coordinate> <z coordinate>"
-    aliases: [address]
+    aliases: [ address ]
+
+  getaddressmap:
+    description: Grabs address map.
+    aliases: [ addressmap ]

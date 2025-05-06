@@ -9,6 +9,7 @@ import com.sk89q.worldguard.protection.flags.registry.FlagRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Objects;
 import java.util.logging.Logger;
 
 public final class addressCalculator extends JavaPlugin {
@@ -16,9 +17,10 @@ public final class addressCalculator extends JavaPlugin {
     // declare your flag as a field accessible to other parts of your code (so you can use this to check it)
 // note: if you want to use a different type of flag, make sure you change StateFlag here and below to that type
     public static StringFlag addressMapUrl;
-    public static DoubleFlag addressOffsetX;
-    public static DoubleFlag addressOffsetZ;
+    public static StringFlag addressOffsetX;
+    public static StringFlag addressOffsetZ;
     public static DoubleFlag addressDensity;
+    public static StringFlag addressDisplayName;
     Logger log = Bukkit.getLogger();
 
     //public static BooleanFlag isDistrict;
@@ -49,15 +51,15 @@ public final class addressCalculator extends JavaPlugin {
 
         try {
             // create a flag with the name "addressOffsetX"
-            DoubleFlag flag = new DoubleFlag("addressOffsetX");
+            StringFlag flag = new StringFlag("addressOffsetX");
             registry.register(flag);
             addressOffsetX = flag; // only set our field if there was no error
         } catch (FlagConflictException e) {
             // some other plugin registered a flag by the same name already.
             // you can use the existing flag, but this may cause conflicts - be sure to check type
             Flag<?> existing = registry.get("addressOffsetX");
-            if (existing instanceof DoubleFlag) {
-                addressOffsetX = (DoubleFlag) existing;
+            if (existing instanceof StringFlag) {
+                addressOffsetX = (StringFlag) existing;
                 log.info("flag 'addressOffsetX' already exists!");
             } else {
                 log.info("flag 'addressOffsetX' failed to has a conflict with an unlike variable!");
@@ -68,15 +70,15 @@ public final class addressCalculator extends JavaPlugin {
 
         try {
             // create a flag with the name "addressOffsetZ"
-            DoubleFlag flag = new DoubleFlag("addressOffsetZ");
+            StringFlag flag = new StringFlag("addressOffsetZ");
             registry.register(flag);
             addressOffsetZ = flag; // only set our field if there was no error
         } catch (FlagConflictException e) {
             // some other plugin registered a flag by the same name already.
             // you can use the existing flag, but this may cause conflicts - be sure to check type
             Flag<?> existing = registry.get("addressOffsetZ");
-            if (existing instanceof DoubleFlag) {
-                addressOffsetZ = (DoubleFlag) existing;
+            if (existing instanceof StringFlag) {
+                addressOffsetZ = (StringFlag) existing;
                 log.info("flag 'addressOffsetZ' already exists!");
             } else {
                 log.info("flag 'addressOffsetZ' failed to has a conflict with an unlike variable!");
@@ -103,13 +105,33 @@ public final class addressCalculator extends JavaPlugin {
                 // hopefully this never actually happens
             }
         }
+
+        try {
+            // create a flag with the name "addressDistrictName"
+            StringFlag flag = new StringFlag("addressDisplayName");
+            registry.register(flag);
+            addressDisplayName = flag; // only set our field if there was no error
+        } catch (FlagConflictException e) {
+            // some other plugin registered a flag by the same name already.
+            // you can use the existing flag, but this may cause conflicts - be sure to check type
+            Flag<?> existing = registry.get("addressDisplayName");
+            if (existing instanceof StringFlag) {
+                addressDisplayName = (StringFlag) existing;
+                log.info("flag 'addressDisplayName' already exists!");
+            } else {
+                log.info("flag 'addressDisplayName' failed to has a conflict with an unlike variable!");
+                // types don't match - this is bad news! some other plugin conflicts with you
+                // hopefully this never actually happens
+            }
+        }
     }
 
     @Override
     public void onEnable() {
         // Plugin startup logic
 
-        getCommand("getaddress").setExecutor(new addressCalculatorCommandService());
+        Objects.requireNonNull(getCommand("getaddress")).setExecutor(new addressCalculatorCommandService());
+        Objects.requireNonNull(getCommand("getaddressmap")).setExecutor(new addressCalculatorCommandService());
     }
 
     @Override
