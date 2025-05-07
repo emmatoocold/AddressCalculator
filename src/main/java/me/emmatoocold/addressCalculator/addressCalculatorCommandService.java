@@ -22,6 +22,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+import static me.emmatoocold.addressCalculator.addressCalculator.*;
 import static me.emmatoocold.addressCalculator.addressCalculatorCore.*;
 
 public class addressCalculatorCommandService implements CommandExecutor, TabCompleter {
@@ -61,100 +62,138 @@ public class addressCalculatorCommandService implements CommandExecutor, TabComp
 
     }
 
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args)
-        {
-            if (command.getName().equalsIgnoreCase("getaddress")) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        if (command.getName().equalsIgnoreCase("getaddress")) {
 
-                double playerX;
-                double playerY;
-                double playerZ;
+            double playerX;
+            double playerY;
+            double playerZ;
 
-                Player player = (Player) sender;
-                org.bukkit.@NotNull Location loc = player.getLocation();
+            Player player = (Player) sender;
+            org.bukkit.@NotNull Location loc = player.getLocation();
 
-                if (args.length == 3) {
-                    //code for 3 hard inputs
-                    playerX = Double.parseDouble(args[1]);
-                    playerY = loc.getY();
-                    playerZ = Double.parseDouble(args[2]);
-                } else if (args.length == 1) {
-                    //code for no hard inputs
-                    playerX = loc.getX();
-                    playerY = loc.getY();
-                    playerZ = loc.getZ();
-                } else {
-                    player.sendMessage(Component.text("usage: /getaddress <Side of road> <X coordinate> <z coordinate>")
-                            .color(NamedTextColor.RED));
-                    return false;
+            if (args.length == 3) {
+                //code for 3 hard inputs
+                playerX = Double.parseDouble(args[1]);
+                playerY = loc.getY();
+                playerZ = Double.parseDouble(args[2]);
+            } else if (args.length == 1) {
+                //code for no hard inputs
+                playerX = loc.getX();
+                playerY = loc.getY();
+                playerZ = loc.getZ();
+            } else {
+                player.sendMessage(Component.text("usage: /getaddress <Side of road> <X coordinate> <z coordinate>")
+                        .color(NamedTextColor.RED));
+                return false;
+            }
+
+            World world = player.getWorld();
+            var adaptedWorld = BukkitAdapter.adapt(world);
+            Location worldEditLoc = new Location(adaptedWorld, playerX, playerY, playerZ);
+            RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
+            RegionQuery query = container.createQuery();
+
+            ApplicableRegionSet set = query.getApplicableRegions(worldEditLoc);
+            String direction = args[0].toLowerCase();
+
+            boolean ifExecuted = false;
+
+
+            for (ProtectedRegion region : set) {
+                if (addressCalculator(region, playerX, playerZ, direction, player)) {
+                    ifExecuted = true;
                 }
+            }
 
-                World world = player.getWorld();
-                var adaptedWorld = BukkitAdapter.adapt(world);
-                Location worldEditLoc = new Location(adaptedWorld, playerX, playerY, playerZ);
-                RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
-                RegionQuery query = container.createQuery();
-
-                ApplicableRegionSet set = query.getApplicableRegions(worldEditLoc);
-                String direction = args[0].toLowerCase();
-
-                for (ProtectedRegion region : set) {
-                    if (addressCalculator(region, playerX, playerZ, direction, player)) {
-                        addressMapFinder(region, player);
+            if (!ifExecuted) {
+                if (set.getRegions().isEmpty()) {
+                player.sendMessage(Component.text("Not in WorldGuard region").color(NamedTextColor.RED));
+                return false;
+                } else {
+                    for (ProtectedRegion region : set) {
+                        if (region.getFlag(addressOffsetX) == null || region.getFlag(addressOffsetZ) == null || region.getFlag(addressDensity) == null) {
+                            player.sendMessage(Component.text("Region has missing or incorrect address parameters").color(NamedTextColor.RED));
+                        }
                     }
                 }
-
-        /*
-        boolean parameterSwitch = false;
-
-        if (!parameterSwitch) {
-            player.sendMessage(Component.text("No region with address parameters found.")
-                    .color(NamedTextColor.RED));
-        }
-         */
-            }
-
-            if (command.getName().equalsIgnoreCase("getaddressmap")) {
-
-                Player player = (Player) sender;
-                org.bukkit.@NotNull Location loc = player.getLocation();
-
-                double playerX;
-                double playerY;
-                double playerZ;
-
-
-                if (args.length == 2) {
-                    //code for 3 hard inputs
-                    playerX = Double.parseDouble(args[0]);
-                    playerY = loc.getY();
-                    playerZ = Double.parseDouble(args[1]);
-                } else if (args.length == 0) {
-                    //code for no hard inputs
-                    playerX = loc.getX();
-                    playerY = loc.getY();
-                    playerZ = loc.getZ();
-                } else {
-                    player.sendMessage(Component.text("usage: /getaddressmap <X coordinate> <z coordinate>")
-                            .color(NamedTextColor.RED));
-                    return false;
-                }
-
-
-                World world = player.getWorld();
-                var adaptedWorld = BukkitAdapter.adapt(world);
-                Location worldEditLoc = new Location(adaptedWorld, playerX, playerY, playerZ);
-                RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
-                RegionQuery query = container.createQuery();
-
-                ApplicableRegionSet set = query.getApplicableRegions(worldEditLoc);
-
+            } else {
+                ifExecuted = false;
                 for (ProtectedRegion region : set) {
-                    addressMapFinder(region, player);
+                    if(region.getFlag(addressMapUrl) != null) {
+                        if (addressMapFinder(region, player)) {
+                            ifExecuted = true;
+                        }
+                    }
                 }
+                if (!ifExecuted) {
+                    if (set.getRegions().isEmpty()) {
+                        player.sendMessage(Component.text("Not in WorldGuard region").color(NamedTextColor.RED));
+                    }
+                    else {
+                    player.sendMessage(Component.text("Not in WorldGuard region").color(NamedTextColor.RED));
+                    }
+                    return false;
 
-
+                }
             }
 
-            return true;
+        }
+
+        if (command.getName().equalsIgnoreCase("getaddressmap")) {
+
+            Player player = (Player) sender;
+            org.bukkit.@NotNull Location loc = player.getLocation();
+
+            double playerX;
+            double playerY;
+            double playerZ;
+
+
+            if (args.length == 2) {
+                //code for 3 hard inputs
+                playerX = Double.parseDouble(args[0]);
+                playerY = loc.getY();
+                playerZ = Double.parseDouble(args[1]);
+            } else if (args.length == 0) {
+                //code for no hard inputs
+                playerX = loc.getX();
+                playerY = loc.getY();
+                playerZ = loc.getZ();
+            } else {
+                player.sendMessage(Component.text("usage: /getaddressmap <X coordinate> <z coordinate>")
+                        .color(NamedTextColor.RED));
+                return false;
+            }
+
+            World world = player.getWorld();
+            var adaptedWorld = BukkitAdapter.adapt(world);
+            Location worldEditLoc = new Location(adaptedWorld, playerX, playerY, playerZ);
+            RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
+            RegionQuery query = container.createQuery();
+
+            ApplicableRegionSet set = query.getApplicableRegions(worldEditLoc);
+
+            boolean ifExecuted = false;
+
+            for (ProtectedRegion region : set) {
+                if(region.getFlag(addressMapUrl) != null) {
+                    if (addressMapFinder(region, player)) {
+                        ifExecuted = true;
+                    }
+                }
+            }
+
+            if (!ifExecuted) {
+                if (set.getRegions().isEmpty()) {
+                    player.sendMessage(Component.text("Not in WorldGuard region").color(NamedTextColor.RED));
+                }
+                else {
+                    player.sendMessage(Component.text("Not in WorldGuard region").color(NamedTextColor.RED));
+                }
+                return false;
+            }
+        }
+        return true;
     }
 }
