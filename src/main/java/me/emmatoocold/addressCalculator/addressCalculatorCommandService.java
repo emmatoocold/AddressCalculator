@@ -112,7 +112,7 @@ public class addressCalculatorCommandService implements CommandExecutor, TabComp
                 return false;
                 } else {
                     for (ProtectedRegion region : set) {
-                        if (region.getFlag(addressOffsetX) == null || region.getFlag(addressOffsetZ) == null || region.getFlag(addressDensity) == null) {
+                        if (region.getFlag(ADDRESS_OFFSET_X) == null || region.getFlag(ADDRESS_OFFSET_Z) == null || region.getFlag(ADDRESS_DENSITY) == null) {
                             player.sendMessage(Component.text("Region has missing or incorrect address parameters").color(NamedTextColor.RED));
                         }
                     }
@@ -120,7 +120,7 @@ public class addressCalculatorCommandService implements CommandExecutor, TabComp
             } else {
                 ifExecuted = false;
                 for (ProtectedRegion region : set) {
-                    if(region.getFlag(addressMapUrl) != null) {
+                    if(region.getFlag(ADDRESS_MAP_URL) != null) {
                         if (addressMapFinder(region, player)) {
                             ifExecuted = true;
                         }
@@ -130,9 +130,7 @@ public class addressCalculatorCommandService implements CommandExecutor, TabComp
                     if (set.getRegions().isEmpty()) {
                         player.sendMessage(Component.text("Not in WorldGuard region").color(NamedTextColor.RED));
                     }
-                    else {
-                    player.sendMessage(Component.text("Not in WorldGuard region").color(NamedTextColor.RED));
-                    }
+                    else
                     return false;
 
                 }
@@ -177,7 +175,7 @@ public class addressCalculatorCommandService implements CommandExecutor, TabComp
             boolean ifExecuted = false;
 
             for (ProtectedRegion region : set) {
-                if(region.getFlag(addressMapUrl) != null) {
+                if(region.getFlag(ADDRESS_MAP_URL) != null) {
                     if (addressMapFinder(region, player)) {
                         ifExecuted = true;
                     }
@@ -188,9 +186,7 @@ public class addressCalculatorCommandService implements CommandExecutor, TabComp
                 if (set.getRegions().isEmpty()) {
                     player.sendMessage(Component.text("Not in WorldGuard region").color(NamedTextColor.RED));
                 }
-                else {
-                    player.sendMessage(Component.text("Not in WorldGuard region").color(NamedTextColor.RED));
-                }
+                else
                 return false;
             }
         }

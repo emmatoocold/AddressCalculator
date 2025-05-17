@@ -53,78 +53,78 @@ public class addressCalculatorCore {
 
         switch (direction) {
             case "north":
-                string = region.getFlag(addressOffsetX);
+                string = region.getFlag(ADDRESS_OFFSET_X);
                 if (string == null || string.isEmpty()) {
                     return false;
                 } else if (checkString(string)) {
                     player.sendMessage(Component.text("your address is " +
                                     (Math.round(Math.abs(playerX - Integer.parseInt(
-                                            Objects.requireNonNull(region.getFlag(addressOffsetX))) * region.getFlag(addressDensity)) / 2) * 2),
+                                            Objects.requireNonNull(region.getFlag(ADDRESS_OFFSET_X))) * region.getFlag(ADDRESS_DENSITY)) / 2) * 2),
                             NamedTextColor.GRAY, TextDecoration.BOLD));
-                    if (region.getFlag(addressDisplayName) != null) {
+                    if (region.getFlag(ADDRESS_DISPLAY_NAME) != null) {
                         player.sendMessage(Component.text("On the North side of an East / West road in " +
-                                BOLD + region.getFlag(addressDisplayName)).color(NamedTextColor.GRAY));
+                                BOLD + region.getFlag(ADDRESS_DISPLAY_NAME)).color(NamedTextColor.GRAY));
                     } else
                         player.sendMessage(Component.text("On the North side of an East / West road").color(NamedTextColor.GRAY));
                     return true;
                 } else
-                    player.sendMessage(Component.text(Objects.requireNonNull(region.getFlag(addressOffsetX))));
+                    player.sendMessage(Component.text(Objects.requireNonNull(region.getFlag(ADDRESS_OFFSET_X))));
                 return false;
             case "east":
-                string = region.getFlag(addressOffsetZ);
+                string = region.getFlag(ADDRESS_OFFSET_Z);
                 if (string == null || string.isEmpty()) {
                     return false;
                 } else if (checkString(string)) {
                     player.sendMessage(Component.text("your address is " +
                                     ((((Math.round(Math.abs(Integer.parseInt(
-                                            Objects.requireNonNull(region.getFlag(addressOffsetZ))) - playerZ) * region.getFlag(addressDensity))) / 2) * 2) -1),
+                                            Objects.requireNonNull(region.getFlag(ADDRESS_OFFSET_Z))) - playerZ) * region.getFlag(ADDRESS_DENSITY))) / 2) * 2) -1),
                             NamedTextColor.GRAY, TextDecoration.BOLD));
-                    if (region.getFlag(addressDisplayName) != null) {
+                    if (region.getFlag(ADDRESS_DISPLAY_NAME) != null) {
                         player.sendMessage(Component.text("On the East side of a North / South road in " +
-                                BOLD + region.getFlag(addressDisplayName)).color(NamedTextColor.GRAY));
+                                BOLD + region.getFlag(ADDRESS_DISPLAY_NAME)).color(NamedTextColor.GRAY));
                     } else
                         player.sendMessage(Component.text("On the East side of a North / South road").color(NamedTextColor.GRAY));
                     return true;
                 } else
-                    player.sendMessage(Component.text(Objects.requireNonNull(region.getFlag(addressOffsetZ))));
+                    player.sendMessage(Component.text(Objects.requireNonNull(region.getFlag(ADDRESS_OFFSET_Z))));
                 return false;
 
             case "south":
-                string = region.getFlag(addressOffsetX);
+                string = region.getFlag(ADDRESS_OFFSET_X);
                 if (string == null || string.isEmpty()) {
                     return false;
                 } else if (checkString(string)) {
                     player.sendMessage(Component.text("your address is " +
                                     (((Math.round(Math.abs(playerX - Integer.parseInt(
-                                            Objects.requireNonNull(region.getFlag(addressOffsetX))) * region.getFlag(addressDensity))) / 2) * 2) - 1),
+                                            Objects.requireNonNull(region.getFlag(ADDRESS_OFFSET_X))) * region.getFlag(ADDRESS_DENSITY))) / 2) * 2) - 1),
                             NamedTextColor.GRAY, TextDecoration.BOLD));
-                    if (region.getFlag(addressDisplayName) != null) {
+                    if (region.getFlag(ADDRESS_DISPLAY_NAME) != null) {
                         player.sendMessage(Component.text("On the South side of an East / West road in " +
-                                BOLD + region.getFlag(addressDisplayName)).color(NamedTextColor.GRAY));
+                                BOLD + region.getFlag(ADDRESS_DISPLAY_NAME)).color(NamedTextColor.GRAY));
                     } else
                         player.sendMessage(Component.text("On the South side of an East / West road").color(NamedTextColor.GRAY));
                     return true;
                 } else
-                    player.sendMessage(Component.text(Objects.requireNonNull(region.getFlag(addressOffsetX))));
+                    player.sendMessage(Component.text(Objects.requireNonNull(region.getFlag(ADDRESS_OFFSET_X))));
                 return false;
 
             case "west":
-                string = region.getFlag(addressOffsetZ);
+                string = region.getFlag(ADDRESS_OFFSET_Z);
                 if (string == null || string.isEmpty()) {
                     return false;
                 } else if (checkString(string)) {
                     player.sendMessage(Component.text("your address is " +
                                     (((Math.round(Math.abs(Integer.parseInt(
-                                            Objects.requireNonNull(region.getFlag(addressOffsetZ))) - playerZ) * region.getFlag(addressDensity))) / 2) * 2),
+                                            Objects.requireNonNull(region.getFlag(ADDRESS_OFFSET_Z))) - playerZ) * region.getFlag(ADDRESS_DENSITY))) / 2) * 2),
                             NamedTextColor.GRAY, TextDecoration.BOLD));
-                    if (region.getFlag(addressDisplayName) != null) {
+                    if (region.getFlag(ADDRESS_DISPLAY_NAME) != null) {
                         player.sendMessage(Component.text("On the West side of a North / South road in " +
-                                BOLD + region.getFlag(addressDisplayName)).color(NamedTextColor.GRAY));
+                                BOLD + region.getFlag(ADDRESS_DISPLAY_NAME)).color(NamedTextColor.GRAY));
                     } else
                         player.sendMessage(Component.text("On the West side of a North / South road").color(NamedTextColor.GRAY));
                     return true;
                 } else
-                    player.sendMessage(Component.text(Objects.requireNonNull(region.getFlag(addressOffsetZ))));
+                    player.sendMessage(Component.text(Objects.requireNonNull(region.getFlag(ADDRESS_OFFSET_Z))));
                 return false;
 
             default:
@@ -134,29 +134,29 @@ public class addressCalculatorCore {
     }
 
     public static boolean addressMapFinder(ProtectedRegion region, Player player) {
-        if(region.getFlag(addressMapUrl) == null) {
+        if(region.getFlag(ADDRESS_MAP_URL) == null) {
             player.sendMessage(Component.text("No address map URL found")
                     .color(NamedTextColor.RED));
             return false;
-        } else if (region.getFlag(addressDisplayName) == null) {
+        } else if (region.getFlag(ADDRESS_DISPLAY_NAME) == null) {
             player.sendMessage(Component
                     .text("Address map")
                     .color(NamedTextColor.LIGHT_PURPLE)
-                            .decorate(TextDecoration.UNDERLINED)
-                            .hoverEvent(HoverEvent.showText(Component.text(Objects.requireNonNull(region.getFlag(addressMapUrl)))
+                    .decorate(TextDecoration.UNDERLINED)
+                    .hoverEvent(HoverEvent.showText(Component.text(Objects.requireNonNull(region.getFlag(ADDRESS_MAP_URL)))
                             .color(NamedTextColor.DARK_GRAY)))
-                            .clickEvent(ClickEvent.openUrl(Objects.requireNonNull(region.getFlag(addressMapUrl)))));
+                    .clickEvent(ClickEvent.openUrl(Objects.requireNonNull(region.getFlag(ADDRESS_MAP_URL)))));
             return true;
         } else {
             player.sendMessage(Component
                     .text("Address map for ")
                     .color(NamedTextColor.LIGHT_PURPLE)
-                    .append(Component.text(Objects.requireNonNull(region.getFlag(addressDisplayName)))
+                    .append(Component.text(Objects.requireNonNull(region.getFlag(ADDRESS_DISPLAY_NAME)))
                             .decorate(TextDecoration.UNDERLINED)
                             .color(NamedTextColor.LIGHT_PURPLE)
-                            .hoverEvent(HoverEvent.showText(Component.text(Objects.requireNonNull(region.getFlag(addressMapUrl)))
-                            .color(NamedTextColor.DARK_GRAY)))
-                            .clickEvent(ClickEvent.openUrl(Objects.requireNonNull(region.getFlag(addressMapUrl))))));
+                            .hoverEvent(HoverEvent.showText(Component.text(Objects.requireNonNull(region.getFlag(ADDRESS_MAP_URL)))
+                                    .color(NamedTextColor.DARK_GRAY)))
+                            .clickEvent(ClickEvent.openUrl(Objects.requireNonNull(region.getFlag(ADDRESS_MAP_URL))))));
             return true;
         }
     }
